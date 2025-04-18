@@ -1,10 +1,10 @@
-import { Button } from "./components/ui/button";
+import HomePage from "./components/HomePage";
 
 function App() {
   return (
     <>
-      <h1>Hello Dive!</h1>
-      <Button>Click me</Button>
+      {/* <NavBar /> */}
+      <HomePage />
     </>
   );
 }
