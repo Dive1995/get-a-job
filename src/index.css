@@ -76,7 +76,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   body {
-    --dot-bg: #f9f9f9;
+    --dot-bg: #fff;
     --dot-color: #848282;
     --dot-size: 1px;
     --dot-space: 30px;
