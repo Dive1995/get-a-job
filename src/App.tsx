@@ -1,10 +1,14 @@
 import HomePage from "./components/HomePage";
+import NewApplicationPage from "./components/NewApplicationPage";
+import RessultsPage from "./components/RessultsPage";
 
 function App() {
   return (
     <>
       {/* <NavBar /> */}
-      <HomePage />
+      {/* <HomePage /> */}
+      {/* <NewApplicationPage /> */}
+      <RessultsPage />
     </>
   );
 }
