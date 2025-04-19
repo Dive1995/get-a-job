@@ -1,4 +1,4 @@
-import { CheckCircle, Dot, Lightbulb } from "lucide-react";
+import { CheckCircle, Lightbulb } from "lucide-react";
 import { JobApplicationAnalysis } from "../lib/JobApplicationAnalysis";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -158,9 +158,9 @@ function RessultsPage() {
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-gray-600">
                   {data.interviewPreparation.likelyQuestions.map((question) => (
-                    <p key={question} className="flex items-start">
-                      <Dot className="mt-1 mr-1" /> {question}
-                    </p>
+                    <ul key={question} className="list-disc pl-5">
+                      <li>{question}</li>
+                    </ul>
                   ))}
                 </CardContent>
               </Card>
@@ -172,9 +172,9 @@ function RessultsPage() {
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-gray-600">
                   {data.interviewPreparation.answersTips.map((tip) => (
-                    <p key={tip} className="flex items-start">
-                      <Dot className="mt-1 mr-1" /> {tip}
-                    </p>
+                    <ul key={tip} className="list-disc pl-5">
+                      <li>{tip}</li>
+                    </ul>
                   ))}
                 </CardContent>
               </Card>

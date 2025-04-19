@@ -7,10 +7,10 @@ function App() {
   return (
     <>
       {/* <NavBar /> */}
-      {/* <HomePage /> */}
+      <HomePage />
       {/* <NewApplicationPage /> */}
       {/* <RessultsPage /> */}
-      <CVandCoverLetter />
+      {/* <CVandCoverLetter /> */}
     </>
   );
 }

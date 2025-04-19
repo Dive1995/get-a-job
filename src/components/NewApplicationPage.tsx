@@ -3,8 +3,13 @@ import { generateJobDetails } from "../lib/jobDetails";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
+import { useNavigate } from "react-router-dom";
+import { JobApplicationAnalysis } from "../lib/JobApplicationAnalysis";
+import { toast } from "sonner";
 
 function NewApplicationPage() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   // const [cv, setCv] = useState<string | null>(null);
   // const [jobDescription, setJobDescription] = useState<string | null>(null);
 
@@ -264,6 +269,7 @@ based on the CV and Job description, Generate a complete JSON object strictly fo
 `;
 
   const generateJobApplication = async () => {
+    setLoading(true);
     const response = await generateJobDetails(prompt);
 
     // for await (const chunk of response) {
@@ -271,8 +277,34 @@ based on the CV and Job description, Generate a complete JSON object strictly fo
     // }
 
     console.log("Response ", response.text);
-    localStorage.setItem("AIresponse", response.text || "");
+    setLoading(false);
+
+    if (response.text) {
+      localStorage.setItem("AIresponse", response.text || "");
+      const index = saveResponse(response.text);
+      navigate(`/application/${index}`);
+    } else {
+      toast("Failed to Generate response, try again!!");
+    }
   };
+
+  const saveResponse = (response: string) => {
+    const data = localStorage.getItem("allApplications") || "[]";
+    const allApplications: JobApplicationAnalysis[] = JSON.parse(data);
+
+    allApplications.push(JSON.parse(response));
+
+    localStorage.setItem("allApplications", JSON.stringify(allApplications));
+    return allApplications.length - 1;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[200px]">
+        <span className="text-4xl animate-ping">✨</span>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-4">
