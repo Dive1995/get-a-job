@@ -17,7 +17,7 @@ function HomePage() {
 
   useEffect(() => {
     setData(allApplications);
-  }, [allApplications]);
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-4">
@@ -45,7 +45,7 @@ function HomePage() {
         <div className="flex gap-4 flex-wrap">
           {data.map((item, index) => (
             <Link to={`/application/${index}`}>
-              <Card className=" w-90">
+              <Card className=" w-90" key={index}>
                 <CardHeader>
                   <CardTitle>{item.jobTrackingMeta.jobTitle}</CardTitle>
                   <CardDescription className="flex items-center">
