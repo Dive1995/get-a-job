@@ -1,31 +1,51 @@
+import { Link } from "react-router-dom";
+
 function NavBar() {
   return (
     <>
-      <nav className="bg-blue-50 text-[#1a1a2e]">
+      <nav className="border-b border-gray-200  bg-opacity-80 backdrop-blur">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="relative flex items-center justify-between h-16">
             <div className="flex-1 flex items-center justify-center sm:justify-between">
-              <div className="flex-shrink-0">
-                <h1 className="text-3xl ">Get a Job</h1>
-              </div>
+              <Link to={"/"}>
+                <div className="flex-shrink-0">
+                  {/* <div className="relative inline-block">
+                    <div className="absolute inset-0 -z-10 blur-lg opacity-40 rounded-full bg-gradient-to-tr from-cyan-300 to-green-400"></div>
+                    <span className="text-xl font-bold text-green-600">
+                      Get a Job
+                    </span>
+                  </div> */}
+                  <span className="relative text-2xl font-bold text-green-700">
+                    <span className="absolute bottom-0 left-0 w-full h-2 bg-green-200 z-[-1] rounded-md"></span>
+                    Get a Job
+                  </span>
+
+                  {/* <div className="relative inline-block">
+                    <div className="absolute -top-2 -left-3 w-10 h-10 bg-green-100 rounded-full -z-10"></div>
+                    <span className="font-bold text-xl text-gray-800">
+                      JobHuntly
+                    </span>
+                  </div> */}
+                </div>
+              </Link>
               <div className="hidden sm:block sm:ml-6">
-                <div className="flex space-x-4">
-                  <a
-                    href="#"
-                    className="transition duration-300 ease-in-out hover:bg-blue-100 px-3 py-2 rounded-md text-sm font-medium"
+                <div className="flex space-x-4 text-green-500">
+                  <Link
+                    to={"/"}
+                    className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium"
                     aria-current="page">
                     Home
-                  </a>
-                  <a
-                    href="#"
-                    className="transition duration-300 ease-in-out hover:bg-blue-100 px-3 py-2 rounded-md text-sm font-medium">
+                  </Link>
+                  <Link
+                    to={"/"}
+                    className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium">
                     About
-                  </a>
-                  <a
-                    href="#"
-                    className="transition duration-300 ease-in-out hover:bg-blue-100 px-3 py-2 rounded-md text-sm font-medium">
+                  </Link>
+                  <Link
+                    to={"/"}
+                    className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium">
                     Sign In
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -51,6 +51,10 @@ function NewApplicationPage() {
   };
 
   const saveResponse = (response: string) => {
+    if (cv) {
+      localStorage.setItem("existingCV", cv);
+    }
+
     const data = localStorage.getItem("allApplications") || "[]";
     const allApplications: JobApplicationAnalysis[] = JSON.parse(data);
 
@@ -70,10 +74,10 @@ function NewApplicationPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-4">
-      <h2 className="text-4xl font-bold">
+      <h2 className="text-3xl font-bold">
         <span className="mr-2">⭐</span>
-        <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
-          New Job Application
+        <span className="bg-gradient-to-tr from-cyan-300 via-teal-400 to-green-400 bg-clip-text text-transparent">
+          One step closer to your dream job.
         </span>
       </h2>
       <div className="grid md:grid-cols-2 gap-4 mt-8">
@@ -86,10 +90,7 @@ function NewApplicationPage() {
             placeholder="📋 Paste your CV here."
             id="cv"
             value={cv || ""}
-            onChange={(e) => {
-              setCv(e.target.value);
-              localStorage.setItem("existingCV", e.target.value);
-            }}
+            onChange={(e) => setCv(e.target.value)}
           />
         </div>
         <div className="">
@@ -122,7 +123,7 @@ function NewApplicationPage() {
 
       <Button
         onClick={generateJobApplication}
-        className={`my-4 bg-gradient-to-r from-blue-400 via-pink-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:opacity-90 transition duration-300`}
+        className={`my-4 bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:opacity-90 transition duration-300`}
         disabled={cv == null || jobDescription == null || jobDescription == ""}>
         Generate
       </Button>

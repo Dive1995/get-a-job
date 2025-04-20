@@ -6,12 +6,19 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NewApplicationPage from "./components/NewApplicationPage.tsx";
 import CVandCoverLetter from "./components/CVandCoverLetter.tsx";
 import NotFound from "./components/NotFound.tsx";
+import Layout from "./components/Layout.tsx";
 
 const router = createBrowserRouter([
-  { path: "/", element: <App /> },
-  { path: "/new", element: <NewApplicationPage /> },
-  { path: "/application/:id", element: <CVandCoverLetter /> },
-  { path: "*", element: <NotFound /> },
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <App /> },
+      { path: "new", element: <NewApplicationPage /> },
+      { path: "application/:id", element: <CVandCoverLetter /> },
+      { path: "*", element: <NotFound /> },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
