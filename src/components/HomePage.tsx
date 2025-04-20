@@ -8,12 +8,16 @@ import {
 } from "./ui/card";
 import { Link } from "react-router-dom";
 import { JobApplicationAnalysis } from "../lib/JobApplicationAnalysis";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function HomePage() {
   const localData = localStorage.getItem("allApplications") || "[]";
   const allApplications: JobApplicationAnalysis[] = JSON.parse(localData);
-  const [data, setData] = useState<JobApplicationAnalysis[]>(allApplications);
+  const [data, setData] = useState<JobApplicationAnalysis[]>([]);
+
+  useEffect(() => {
+    setData(allApplications);
+  }, [allApplications]);
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-4">
