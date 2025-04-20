@@ -41,19 +41,44 @@ function CVandCoverLetter() {
           <TabsTrigger value="cv">📄 Resume</TabsTrigger>
         </TabsList>
         <TabsContent value="coverletter">
-          <div className="flex items-center justify-center">
-            <Card className="w-full max-w-4xl">
-              <CardContent className="p-6">
-                <p className="whitespace-pre-wrap leading-relaxed text-gray-800">
-                  {data.coverLetter}
+          <div className="md:flex gap-4 mt-4">
+            <div className="space-y-2 flex-1">
+              <p className="text-lg font-bold">🏢 About the compony</p>
+              <p className="font-bold text-gray-800">{data.company.name}</p>
+              {data.company.address && (
+                <p className="text-gray-700 text-sm">
+                  Location: {data.company.address}
                 </p>
-              </CardContent>
-            </Card>
+              )}
+              {data.company.highlights &&
+                data.company.highlights.map((item) => (
+                  <ul className="list-disc pl-5">
+                    <li className="text-gray-600">{item}</li>
+                  </ul>
+                ))}
+            </div>
+            <div className="flex-2">
+              <p className="text-lg font-bold my-4 sm:mt-0 sm:mb-2">
+                ✨ Cover Letter
+              </p>
+
+              <ScrollArea className="h-[700px]">
+                <div className="flex items-center justify-center">
+                  <Card className="w-full max-w-4xl">
+                    <CardContent className="p-6">
+                      <p className="whitespace-pre-wrap leading-relaxed text-gray-800">
+                        {data.coverLetter}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </ScrollArea>
+            </div>
           </div>
         </TabsContent>
         <TabsContent value="cv">
-          <div className="flex gap-4 mt-4">
-            <div className="space-y-2">
+          <div className="md:flex gap-4 mt-4">
+            <div className="space-y-2 flex-1">
               <p className="text-lg font-bold">💡 CV Improvement suggestions</p>
               {data.resumeOptimization.cvImprovementSuggestions.map((item) => (
                 <ul className="list-disc pl-5">
@@ -61,8 +86,10 @@ function CVandCoverLetter() {
                 </ul>
               ))}
             </div>
-            <div>
-              <p className="text-lg font-bold mb-2">✨ Optimized Resume</p>
+            <div className="flex-2 my-4 md:my-0">
+              <p className="text-lg font-bold my-4 sm:mt-0 sm:mb-2">
+                ✨ Optimized Resume
+              </p>
               <ScrollArea className="h-[700px]">
                 <Card className="w-full max-w-4xl">
                   <CardContent className="flex aspect-auto p-6">

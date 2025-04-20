@@ -1,6 +1,13 @@
 export interface JobApplicationAnalysis {
   coverLetter: string;
 
+  company: {
+    name: string;
+    address?: string;
+    about?: string;
+    highlights?: string[];
+  };
+
   candidate?: {
     candidate_name?: string;
     current_status?: string;

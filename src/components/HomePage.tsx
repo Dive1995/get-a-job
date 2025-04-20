@@ -23,17 +23,17 @@ function HomePage() {
     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-4">
       <h2 className="text-4xl font-bold">
         <span className="mr-2">👋</span>
-        <span className="bg-gradient-to-r from-blue-300 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-          Hi Diveshan!
+        <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+          Hey there!
         </span>
       </h2>
       <section className="my-4 flex gap-4">
         <Link to={"/new"}>
-          <div className="w-40 h-20 p-2 rounded-lg shadow-md flex items-center justify-center bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 text-white font-bold">
+          <div className="w-40 h-20 p-2 rounded-lg shadow-md flex items-center justify-center bg-gradient-to-r from-blue-400 via-pink-500 to-purple-500 text-white font-bold">
             <p className="text-center">New application</p>
           </div>
         </Link>
-        <div className="w-40 h-20 p-2 rounded-lg shadow-md flex items-center justify-center bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 text-white font-bold">
+        <div className="w-40 h-20 p-2 rounded-lg shadow-md flex items-center justify-center bg-gradient-to-r from-blue-400 via-pink-500 to-purple-500 text-white font-bold">
           <p className="text-center">Track Applications</p>
         </div>
       </section>

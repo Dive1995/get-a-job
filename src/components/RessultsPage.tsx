@@ -49,8 +49,9 @@ function RessultsPage() {
         </div>
         <p className="text-gray-700 mt-4">
           🎯 <span className="font-medium">ATS Compatibility Score:</span>{" "}
-          <span className="font-bold">{data.atsAnalysis.score}/100</span>{" "}
-          {getScoreBar(data.atsAnalysis.score)}
+          <span className="font-bold block sm:inline">
+            {data.atsAnalysis.score}/100 {getScoreBar(data.atsAnalysis.score)}
+          </span>{" "}
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 mt-4">
