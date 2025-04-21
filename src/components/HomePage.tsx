@@ -20,7 +20,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-4">
+    <div>
       <section className="flex flex-col items-center justify-center mt-16">
         <h2 className="text-4xl font-bold">
           {/* <span className="mr-2">👋</span> */}
@@ -38,9 +38,11 @@ function HomePage() {
               <p className="text-center">New application</p>
             </div> */}
           </Link>
-          <div className="w-40 h-20 p-2 rounded-lg shadow-sm flex items-center justify-center bg-white transition duration-300 hover:shadow-2xl hover:shadow-green-100  hover:text-gray-900 text-gray-500 font-semibold">
-            <p className="text-center">🧭 Track Applications</p>
-          </div>
+          <Link to={"/track"}>
+            <div className="w-40 h-20 p-2 rounded-lg shadow-sm flex items-center justify-center bg-white transition duration-300 hover:shadow-2xl hover:shadow-green-100  hover:text-gray-900 text-gray-500 font-semibold">
+              <p className="text-center">🧭 Track Applications</p>
+            </div>
+          </Link>
           {/* <div className="w-40 h-20 p-2 rounded-lg shadow-md flex items-center justify-center bg-gradient-to-r from-blue-300 via-pink-400 to-purple-400 text-white font-bold">
             <p className="text-center">🧭 Track Applications</p>
           </div> */}
@@ -71,40 +73,6 @@ function HomePage() {
               </Card>
             </Link>
           ))}
-          {/* 
-          <Card className=" w-70">
-            <CardHeader>
-              <CardTitle>Fullstack Developer</CardTitle>
-              <CardDescription className="flex items-center">
-                Regens & co. <Dot /> Frankfurt
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-400">11th April, 2025</p>
-            </CardContent>
-          </Card>
-          <Card className=" w-70">
-            <CardHeader>
-              <CardTitle>Fullstack Developer</CardTitle>
-              <CardDescription className="flex items-center">
-                Regens & co. <Dot /> Frankfurt
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-400">11th April, 2025</p>
-            </CardContent>
-          </Card>
-          <Card className=" w-70">
-            <CardHeader>
-              <CardTitle>Fullstack Developer</CardTitle>
-              <CardDescription className="flex items-center">
-                Regens & co. <Dot /> Frankfurt
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-400">11th April, 2025</p>
-            </CardContent>
-          </Card> */}
         </div>
       </section>
     </div>

@@ -7,6 +7,7 @@ import NewApplicationPage from "./components/NewApplicationPage.tsx";
 import CVandCoverLetter from "./components/CVandCoverLetter.tsx";
 import NotFound from "./components/NotFound.tsx";
 import Layout from "./components/Layout.tsx";
+import TrackApplicationPage from "./components/TrackApplicationPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <App /> },
       { path: "new", element: <NewApplicationPage /> },
+      { path: "track", element: <TrackApplicationPage /> },
       { path: "application/:id", element: <CVandCoverLetter /> },
       { path: "*", element: <NotFound /> },
     ],

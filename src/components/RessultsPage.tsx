@@ -16,7 +16,7 @@ function RessultsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-12">
+    <div className="py-6 space-y-12">
       {/* User details */}
       <section className="space-y-2">
         <h1 className="text-3xl font-bold text-gray-900">
