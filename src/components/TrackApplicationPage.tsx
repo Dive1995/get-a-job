@@ -29,7 +29,6 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
-import { DatePicker } from "./DatePicker";
 
 function TrackApplicationPage() {
   const localData = localStorage.getItem("allApplications") || "[]";
@@ -178,7 +177,7 @@ function TrackApplicationPage() {
                               <Label className="text-gray-700">
                                 📅 Applied on
                               </Label>
-                              <DatePicker />
+                              <Input type="date" />
                             </div>
                             <div className="space-y-2">
                               <Label className="text-gray-700">⚪ Status</Label>
