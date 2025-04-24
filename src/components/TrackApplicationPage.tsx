@@ -1,13 +1,6 @@
 import { JobApplicationAnalysis } from "@/lib/JobApplicationAnalysis";
 import { Card, CardContent } from "./ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Table,
   TableBody,
   TableCaption,
@@ -16,28 +9,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
+import { Plus } from "lucide-react";
+import TrackApplicationDialog from "./TrackApplicationDialog";
+import { Link } from "react-router-dom";
 
 function TrackApplicationPage() {
   const localData = localStorage.getItem("allApplications") || "[]";
   const allApplications: JobApplicationAnalysis[] = JSON.parse(localData);
   const [data, setData] = useState<JobApplicationAnalysis[]>([]);
+  const [responsesReceived, setResponsesReceived] = useState(0);
 
   useEffect(() => {
     setData(allApplications);
   }, []);
+
+  useEffect(() => {
+    const count = data.reduce((prev, current) => {
+      const status = current.jobTrackingMeta.applicationStatus;
+      if (status != "notApplied" && status != "applied") {
+        prev++;
+      }
+      return prev;
+    }, 0);
+    setResponsesReceived(count);
+  }, [data]);
 
   const showApplicationStatus = (status: string) => {
     switch (status) {
@@ -110,7 +108,9 @@ function TrackApplicationPage() {
         </Card>
         <Card className="w-50">
           <CardContent className="flex items-center justify-center flex-col">
-            <p className="text-4xl font-bold text-gray-700">3</p>
+            <p className="text-4xl font-bold text-gray-700">
+              {responsesReceived}
+            </p>
             <p className=" text-gray-400">Respons received</p>
           </CardContent>
         </Card>
@@ -123,6 +123,13 @@ function TrackApplicationPage() {
       </section>
 
       <section>
+        <div className="flex justify-end my-4">
+          <TrackApplicationDialog title="Track new application" item={null}>
+            <Button variant="secondary">
+              <Plus /> Track new Application
+            </Button>
+          </TrackApplicationDialog>
+        </div>
         <Table>
           <TableCaption>A list of your recent applications.</TableCaption>
           <TableHeader>
@@ -140,13 +147,17 @@ function TrackApplicationPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item) => {
+            {data.map((item, index) => {
               const status = showApplicationStatus(
                 item.jobTrackingMeta.applicationStatus
               );
               return (
                 <TableRow>
-                  <TableCell>{item.jobTrackingMeta.jobTitle}</TableCell>
+                  <TableCell>
+                    <Link to={`/application/${index}`} className="underline">
+                      {item.jobTrackingMeta.jobTitle}
+                    </Link>
+                  </TableCell>
                   <TableCell>{item.jobTrackingMeta.company}</TableCell>
                   <TableCell>{item.company.address}</TableCell>
                   <TableCell>
@@ -161,78 +172,11 @@ function TrackApplicationPage() {
                   <TableCell>{item.jobTrackingMeta.appliedDate}</TableCell>
                   <TableCell>
                     {/* Edit modal */}
-                    <Dialog>
-                      <DialogTrigger>
-                        <Button variant="outline">Edit</Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle className="mb-2 text-xl">
-                            Edit application
-                          </DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <div className="space-y-2">
-                              <Label className="text-gray-700">
-                                📅 Applied on
-                              </Label>
-                              <Input type="date" />
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-gray-700">⚪ Status</Label>
-                              <Select defaultValue="notApplied">
-                                <SelectTrigger className="w-[180px]">
-                                  <SelectValue placeholder="Status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="notApplied">
-                                    Not applied
-                                  </SelectItem>
-                                  <SelectItem value="applied">
-                                    Applied
-                                  </SelectItem>
-                                  <SelectItem value="pending">
-                                    Pending
-                                  </SelectItem>
-                                  <SelectItem value="call">
-                                    Call Received
-                                  </SelectItem>
-                                  <SelectItem value="interview">
-                                    Interview
-                                  </SelectItem>
-                                  <SelectItem value="selected">
-                                    Selected
-                                  </SelectItem>
-                                  <SelectItem value="rejected">
-                                    Rejected
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-gray-700">💼 Position</Label>
-                            <Input value={item.jobTrackingMeta.jobTitle} />
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-gray-700">🏢 Company</Label>
-                            <Input value={item.company.name} />
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-gray-700">📍 Location</Label>
-                            <Input value={item.company.address} />
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-gray-700">
-                              🔗 Job post link
-                            </Label>
-                            <Input value="-" />
-                          </div>
-                          <Button className="w-full">Save</Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                    <TrackApplicationDialog
+                      title="Edit Application"
+                      item={item}>
+                      <Button variant="outline">Edit</Button>
+                    </TrackApplicationDialog>
                   </TableCell>
                   {/* <TableCell className="font-medium">INV001</TableCell>
                 <TableCell>Paid</TableCell>

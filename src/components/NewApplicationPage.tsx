@@ -86,7 +86,7 @@ function NewApplicationPage() {
             CV
           </Label>
           <Textarea
-            className="bg-gray-50 h-[400px]"
+            className="bg-white h-[400px]"
             placeholder="📋 Paste your CV here."
             id="cv"
             value={cv || ""}
@@ -98,7 +98,7 @@ function NewApplicationPage() {
             Job description
           </Label>
           <Textarea
-            className="bg-gray-50 h-[400px]"
+            className="bg-white h-[400px]"
             placeholder="📋 Paste your Job description here."
             id="jobDesc"
             onChange={(e) => setJobDescription(e.target.value)}
@@ -112,7 +112,7 @@ function NewApplicationPage() {
           <span className="text-gray-400 text-sm">(optional)</span>:
         </Label>
         <Textarea
-          className="bg-gray-50 h-[100px]"
+          className="bg-white h-[100px]"
           placeholder="✍🏼 Write about your skills and experience, to provide more personal context."
           id="additional"
           onChange={(e) => {
@@ -123,7 +123,7 @@ function NewApplicationPage() {
 
       <Button
         onClick={generateJobApplication}
-        className={`my-4 bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:opacity-90 transition duration-300`}
+        className={`my-4 bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:opacity-90 transition duration-300 disabled:cursor-not-allowed`}
         disabled={cv == null || jobDescription == null || jobDescription == ""}>
         Generate
       </Button>

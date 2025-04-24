@@ -31,7 +31,7 @@ function HomePage() {
         </h2>
         <div className="my-8 flex gap-4">
           <Link to={"/new"}>
-            <div className="w-40 h-20 p-2 rounded-lg shadow-sm flex items-center justify-center bg-white transition duration-300 hover:shadow-2xl hover:shadow-green-100  hover:text-gray-900 text-gray-500 font-semibold">
+            <div className="w-40 h-20 p-2 rounded-lg shadow-sm flex items-center justify-center bg-white transition duration-300 hover:shadow-2xl hover:shadow-green-100  hover:text-gray-900 border text-gray-500 font-semibold">
               <p className="text-center">📝 New application</p>
             </div>
             {/* <div className="w-40 h-20 p-2 rounded-lg shadow-md flex items-center justify-center bg-gradient-to-r from-blue-300 via-pink-400 to-purple-400 text-white font-bold">
@@ -39,7 +39,7 @@ function HomePage() {
             </div> */}
           </Link>
           <Link to={"/track"}>
-            <div className="w-40 h-20 p-2 rounded-lg shadow-sm flex items-center justify-center bg-white transition duration-300 hover:shadow-2xl hover:shadow-green-100  hover:text-gray-900 text-gray-500 font-semibold">
+            <div className="w-40 h-20 p-2 rounded-lg shadow-sm flex items-center justify-center bg-white transition duration-300 hover:shadow-2xl hover:shadow-green-100  hover:text-gray-900 text-gray-500 border font-semibold">
               <p className="text-center">🧭 Track Applications</p>
             </div>
           </Link>
@@ -59,7 +59,7 @@ function HomePage() {
         <div className="flex gap-4 flex-wrap">
           {data.map((item, index) => (
             <Link to={`/application/${index}`}>
-              <Card className=" w-90" key={index}>
+              <Card className=" w-90 hover:shadow-md" key={index}>
                 <CardHeader>
                   <CardTitle>{item.jobTrackingMeta.jobTitle}</CardTitle>
                   <CardDescription className="flex items-center">
