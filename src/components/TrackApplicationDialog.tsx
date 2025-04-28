@@ -15,15 +15,34 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { JobApplicationAnalysis } from "@/lib/JobApplicationAnalysis";
+import { JobApplicationModel } from "@/lib/JobApplicationModel";
+import { useState } from "react";
 
 type Props = {
-  item: JobApplicationAnalysis | null;
+  item: JobApplicationModel | null;
   title: string;
   children: React.ReactNode;
 };
 
 function TrackApplicationDialog({ item, title, children }: Props) {
+  const [jobTitle, setJobTitle] = useState(
+    item?.jobTrackingMeta.jobTitle || ""
+  );
+  const [company, setCompany] = useState(item?.jobTrackingMeta.company || "");
+  const [location, setLocation] = useState(
+    item?.jobTrackingMeta.location || ""
+  );
+  const [appliedDate, setAppliedDate] = useState("");
+  const [status, setStatus] = useState("notApplied");
+
+  const updateTrackingApplication = () => {
+    console.log("Jobtitle: ", jobTitle);
+    console.log("company: ", company);
+    console.log("loca: ", location);
+    console.log("date: ", appliedDate);
+    console.log("status: ", status);
+  };
+
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
@@ -35,11 +54,18 @@ function TrackApplicationDialog({ item, title, children }: Props) {
           <div className="flex items-center justify-between">
             <div className="space-y-2">
               <Label className="text-gray-700">📅 Applied on</Label>
-              <Input type="date" />
+              <Input
+                type="date"
+                value={appliedDate}
+                onChange={(e) => setAppliedDate(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label className="text-gray-700">⚪ Status</Label>
-              <Select defaultValue="notApplied">
+              <Select
+                defaultValue="notApplied"
+                value={status}
+                onValueChange={(val) => setStatus(val)}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
@@ -57,21 +83,34 @@ function TrackApplicationDialog({ item, title, children }: Props) {
           </div>
           <div className="space-y-2">
             <Label className="text-gray-700">💼 Position</Label>
-            <Input value={item?.jobTrackingMeta.jobTitle} />
+            <Input
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label className="text-gray-700">🏢 Company</Label>
-            <Input value={item?.company.name} />
+            <Input
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label className="text-gray-700">📍 Location</Label>
-            <Input value={item?.company.address} />
+            <Input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label className="text-gray-700">🔗 Job post link</Label>
             <Input value="-" />
           </div>
-          <Button className={`w-full`} disabled={item == null}>
+          <Button
+            onClick={updateTrackingApplication}
+            className={`w-full`}
+            // disabled={item == null}
+          >
             Save
           </Button>
         </div>

@@ -1,4 +1,4 @@
-export interface JobApplicationAnalysis {
+export interface JobApplicationModel {
   coverLetter: string;
 
   company: {

@@ -1,4 +1,3 @@
-import { JobApplicationAnalysis } from "@/lib/JobApplicationAnalysis";
 import { Card, CardContent } from "./ui/card";
 import {
   Table,
@@ -15,16 +14,13 @@ import { Badge } from "./ui/badge";
 import { Plus } from "lucide-react";
 import TrackApplicationDialog from "./TrackApplicationDialog";
 import { Link } from "react-router-dom";
+import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 
 function TrackApplicationPage() {
-  const localData = localStorage.getItem("allApplications") || "[]";
-  const allApplications: JobApplicationAnalysis[] = JSON.parse(localData);
-  const [data, setData] = useState<JobApplicationAnalysis[]>([]);
+  const {
+    state: { allApplications: data },
+  } = useJobApplicationContext();
   const [responsesReceived, setResponsesReceived] = useState(0);
-
-  useEffect(() => {
-    setData(allApplications);
-  }, []);
 
   useEffect(() => {
     const count = data.reduce((prev, current) => {
@@ -159,7 +155,7 @@ function TrackApplicationPage() {
                     </Link>
                   </TableCell>
                   <TableCell>{item.jobTrackingMeta.company}</TableCell>
-                  <TableCell>{item.company.address}</TableCell>
+                  <TableCell>{item.jobTrackingMeta.location}</TableCell>
                   <TableCell>
                     {item.jobTrackingMeta.languageRequirement}
                   </TableCell>

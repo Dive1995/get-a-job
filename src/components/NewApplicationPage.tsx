@@ -4,17 +4,16 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { useNavigate } from "react-router-dom";
-import { JobApplicationAnalysis } from "../lib/JobApplicationAnalysis";
 import { toast } from "sonner";
-
-const stored = localStorage.getItem("existingCV");
-const existingCV: string | null = stored ? stored : null;
+import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 
 function NewApplicationPage() {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { state, dispatch } = useJobApplicationContext();
+
+  const [loading, setLoading] = useState(false);
   const [jobDescription, setJobDescription] = useState<string | null>(null);
-  const [cv, setCv] = useState<string | null>(existingCV ? existingCV : null);
+  const [cv, setCv] = useState<string | null>(state.existingCV);
   const [additional, setAdditional] = useState<string | null>(null);
 
   const prompt = `CV: ${cv}, Job description: ${jobDescription} ${
@@ -38,7 +37,10 @@ function NewApplicationPage() {
       setLoading(false);
 
       if (response.text) {
-        localStorage.setItem("AIresponse", response.text || "");
+        dispatch({
+          type: "SET_AI_RESPONSE",
+          payload: JSON.parse(response.text),
+        });
         const index = saveResponse(response.text);
         navigate(`/application/${index}`);
       } else {
@@ -52,16 +54,10 @@ function NewApplicationPage() {
 
   const saveResponse = (response: string) => {
     if (cv) {
-      localStorage.setItem("existingCV", cv);
+      dispatch({ type: "STORE_CV", payload: cv });
     }
-
-    const data = localStorage.getItem("allApplications") || "[]";
-    const allApplications: JobApplicationAnalysis[] = JSON.parse(data);
-
-    allApplications.push(JSON.parse(response));
-
-    localStorage.setItem("allApplications", JSON.stringify(allApplications));
-    return allApplications.length - 1;
+    dispatch({ type: "ADD_APPLICATION", payload: JSON.parse(response) });
+    return state.allApplications.length - 1;
   };
 
   if (loading) {

@@ -7,16 +7,16 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Link } from "react-router-dom";
-import { JobApplicationAnalysis } from "../lib/JobApplicationAnalysis";
+import { JobApplicationModel } from "../lib/JobApplicationModel";
 import { useEffect, useState } from "react";
+import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 
 function HomePage() {
-  const localData = localStorage.getItem("allApplications") || "[]";
-  const allApplications: JobApplicationAnalysis[] = JSON.parse(localData);
-  const [data, setData] = useState<JobApplicationAnalysis[]>([]);
+  const { state } = useJobApplicationContext();
+  const [data, setData] = useState<JobApplicationModel[]>([]);
 
   useEffect(() => {
-    setData(allApplications);
+    setData(state.allApplications);
   }, []);
 
   return (

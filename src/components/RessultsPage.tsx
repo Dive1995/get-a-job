@@ -1,18 +1,26 @@
 import { CheckCircle, Lightbulb } from "lucide-react";
-import { JobApplicationAnalysis } from "../lib/JobApplicationAnalysis";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
+import { JobApplicationModel } from "@/lib/JobApplicationModel";
 
-function RessultsPage() {
-  const data: JobApplicationAnalysis = JSON.parse(
-    localStorage.getItem("AIresponse") || "{}"
-  );
+type Props = {
+  data: JobApplicationModel;
+};
 
+function RessultsPage({ data }: Props) {
   function getScoreBar(score: number, totalBlocks = 10) {
     const filledBlocks = Math.round((score / 100) * totalBlocks);
     const emptyBlocks = totalBlocks - filledBlocks;
     return "🟩".repeat(filledBlocks) + "⬜".repeat(emptyBlocks);
+  }
+
+  if (!data) {
+    return (
+      <div className="text-xl text-center text-gray-700 mt-8">
+        No response found!!!
+      </div>
+    );
   }
 
   return (

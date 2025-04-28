@@ -1,27 +1,24 @@
 import { useParams } from "react-router-dom";
-import { JobApplicationAnalysis } from "../lib/JobApplicationAnalysis";
+import { JobApplicationModel } from "../lib/JobApplicationModel";
 import RessultsPage from "./RessultsPage";
 import { Card, CardContent } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { useEffect, useState } from "react";
 import NotFound from "./NotFound";
+import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 
 function CVandCoverLetter() {
   const { id } = useParams();
 
-  const localData = localStorage.getItem("allApplications") || "[]";
-  const allApplications: JobApplicationAnalysis[] = JSON.parse(localData);
-  const [data, setData] = useState<JobApplicationAnalysis | null>();
+  const { state } = useJobApplicationContext();
+  const [data, setData] = useState<JobApplicationModel | null>();
 
   useEffect(() => {
     console.log("id: ", id);
     if (id) {
       const index = parseInt(id, 10);
-      console.log(index);
-      console.log(allApplications);
-      const found = allApplications[index];
-      console.log(found);
+      const found = state.allApplications[index];
       setData(found);
     }
   }, [id]);
@@ -103,7 +100,7 @@ function CVandCoverLetter() {
           </div>
         </TabsContent>
         <TabsContent value="analysis">
-          <RessultsPage />
+          <RessultsPage data={data} />
         </TabsContent>
       </Tabs>
     </div>
