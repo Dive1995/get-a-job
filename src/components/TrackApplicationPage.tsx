@@ -18,13 +18,13 @@ import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 
 function TrackApplicationPage() {
   const {
-    state: { allApplications: data },
+    state: { applicationTrackingList: data },
   } = useJobApplicationContext();
   const [responsesReceived, setResponsesReceived] = useState(0);
 
   useEffect(() => {
     const count = data.reduce((prev, current) => {
-      const status = current.jobTrackingMeta.applicationStatus;
+      const status = current.status;
       if (status != "notApplied" && status != "applied") {
         prev++;
       }
@@ -143,29 +143,31 @@ function TrackApplicationPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item, index) => {
-              const status = showApplicationStatus(
-                item.jobTrackingMeta.applicationStatus
-              );
+            {data.map((item) => {
+              const status = showApplicationStatus(item.status);
               return (
                 <TableRow>
                   <TableCell>
-                    <Link to={`/application/${index}`} className="underline">
-                      {item.jobTrackingMeta.jobTitle}
-                    </Link>
+                    {item.applicationId ? (
+                      <Link
+                        to={`/application/${item.applicationId}`}
+                        className="underline">
+                        {item.position}
+                      </Link>
+                    ) : (
+                      <p>{item.position}</p>
+                    )}
                   </TableCell>
-                  <TableCell>{item.jobTrackingMeta.company}</TableCell>
-                  <TableCell>{item.jobTrackingMeta.location}</TableCell>
-                  <TableCell>
-                    {item.jobTrackingMeta.languageRequirement}
-                  </TableCell>
+                  <TableCell>{item.company}</TableCell>
+                  <TableCell>{item.location}</TableCell>
+                  <TableCell>{item.language}</TableCell>
                   <TableCell>-</TableCell>
                   <TableCell>
                     <Badge className={`${status.textColor} ${status.bgColor}`}>
                       {status.value}
                     </Badge>
                   </TableCell>
-                  <TableCell>{item.jobTrackingMeta.appliedDate}</TableCell>
+                  <TableCell>{item.appliedOn}</TableCell>
                   <TableCell>
                     {/* Edit modal */}
                     <TrackApplicationDialog

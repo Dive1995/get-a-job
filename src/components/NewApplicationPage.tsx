@@ -6,6 +6,8 @@ import { Textarea } from "./ui/textarea";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
+import { JobApplicationModel } from "@/lib/JobApplicationModel";
+import { JobTrackingModel } from "@/lib/JobTrackingModel";
 
 function NewApplicationPage() {
   const navigate = useNavigate();
@@ -56,7 +58,23 @@ function NewApplicationPage() {
     if (cv) {
       dispatch({ type: "STORE_CV", payload: cv });
     }
-    dispatch({ type: "ADD_APPLICATION", payload: JSON.parse(response) });
+    // store application data
+    const responseData: JobApplicationModel = JSON.parse(response);
+    dispatch({ type: "ADD_APPLICATION", payload: responseData });
+
+    // store tracking data
+    const jobTrackingData: JobTrackingModel = {
+      position: responseData.jobTrackingMeta.jobTitle,
+      company: responseData.jobTrackingMeta.company,
+      location: responseData.jobTrackingMeta.location,
+      language: responseData.jobTrackingMeta.languageRequirement,
+      siteUrl: null,
+      status: responseData.jobTrackingMeta.applicationStatus,
+      appliedOn: null,
+      applicationId: state.allApplications.length - 1, //TODO: double check, whether allApplication was alread updated or not
+    };
+    dispatch({ type: "TRACK_NEW_APPLICATION", payload: jobTrackingData });
+
     return state.allApplications.length - 1;
   };
 

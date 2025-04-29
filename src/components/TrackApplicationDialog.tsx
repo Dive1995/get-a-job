@@ -15,32 +15,51 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { JobApplicationModel } from "@/lib/JobApplicationModel";
 import { useState } from "react";
+import { JobTrackingModel } from "@/lib/JobTrackingModel";
+import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 
 type Props = {
-  item: JobApplicationModel | null;
+  item: JobTrackingModel | null;
   title: string;
   children: React.ReactNode;
 };
 
 function TrackApplicationDialog({ item, title, children }: Props) {
-  const [jobTitle, setJobTitle] = useState(
-    item?.jobTrackingMeta.jobTitle || ""
-  );
-  const [company, setCompany] = useState(item?.jobTrackingMeta.company || "");
-  const [location, setLocation] = useState(
-    item?.jobTrackingMeta.location || ""
-  );
-  const [appliedDate, setAppliedDate] = useState("");
+  const [position, setPosition] = useState(item?.position || "");
+  const [company, setCompany] = useState(item?.company || "");
+  const [location, setLocation] = useState(item?.location || "");
+  const [language, setLanguage] = useState(item?.language || "");
+  const [appliedOn, setAppliedOn] = useState("");
   const [status, setStatus] = useState("notApplied");
 
+  const { dispatch } = useJobApplicationContext();
+
   const updateTrackingApplication = () => {
-    console.log("Jobtitle: ", jobTitle);
+    console.log("Position: ", position);
     console.log("company: ", company);
     console.log("loca: ", location);
-    console.log("date: ", appliedDate);
+    console.log("date: ", appliedOn);
     console.log("status: ", status);
+
+    if (item) {
+      // update existing tracking data
+    } else {
+      // new tracking data
+      dispatch({
+        type: "TRACK_NEW_APPLICATION",
+        payload: {
+          position,
+          location,
+          appliedOn,
+          applicationId: null,
+          company,
+          language,
+          status,
+          siteUrl: null,
+        },
+      });
+    }
   };
 
   return (
@@ -56,8 +75,8 @@ function TrackApplicationDialog({ item, title, children }: Props) {
               <Label className="text-gray-700">📅 Applied on</Label>
               <Input
                 type="date"
-                value={appliedDate}
-                onChange={(e) => setAppliedDate(e.target.value)}
+                value={appliedOn}
+                onChange={(e) => setAppliedOn(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -84,8 +103,8 @@ function TrackApplicationDialog({ item, title, children }: Props) {
           <div className="space-y-2">
             <Label className="text-gray-700">💼 Position</Label>
             <Input
-              value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
             />
           </div>
           <div className="space-y-2">
@@ -100,6 +119,13 @@ function TrackApplicationDialog({ item, title, children }: Props) {
             <Input
               value={location}
               onChange={(e) => setLocation(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-gray-700">📍 Language</Label>
+            <Input
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
             />
           </div>
           <div className="space-y-2">

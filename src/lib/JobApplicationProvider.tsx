@@ -1,8 +1,14 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { JobApplicationModel } from "./JobApplicationModel";
+import { JobTrackingModel } from "./JobTrackingModel";
 
 const localData = localStorage.getItem("allApplications") || "[]";
 const allApplications: JobApplicationModel[] = JSON.parse(localData);
+
+const localTrackingList =
+  localStorage.getItem("applicationTrackingList") || "[]";
+const applicationTrackingList: JobTrackingModel[] =
+  JSON.parse(localTrackingList);
 
 const storedCV: string | null = localStorage.getItem("existingCV") || null;
 
@@ -11,12 +17,15 @@ type Actions =
   | { type: "SET_AI_RESPONSE"; payload: JobApplicationModel }
   | { type: "REMOVE_APPLICATION"; payload: number }
   | { type: "UPDATE_APPLICATION"; payload: JobApplicationModel }
-  | { type: "ADD_APPLICATION"; payload: JobApplicationModel };
+  | { type: "ADD_APPLICATION"; payload: JobApplicationModel }
+  | { type: "TRACK_NEW_APPLICATION"; payload: JobTrackingModel }
+  | { type: "UPDATE_TRACK_APPLICATION"; payload: JobTrackingModel };
 
 type StateType = {
   allApplications: JobApplicationModel[];
   existingCV: string | null;
   AIresponse: JobApplicationModel | null;
+  applicationTrackingList: JobTrackingModel[];
 };
 
 interface JobApplicationContextType {
@@ -49,6 +58,13 @@ const reducer = (state: StateType, action: Actions) => {
         JSON.stringify(state.allApplications)
       );
       return state;
+    case "TRACK_NEW_APPLICATION":
+      state.applicationTrackingList.push(action.payload);
+      localStorage.setItem(
+        "applicationTrackingList",
+        JSON.stringify(action.payload)
+      );
+      return state;
     case "STORE_CV":
       localStorage.setItem("existingCV", action.payload);
       return { ...state, existingCV: action.payload };
@@ -66,6 +82,7 @@ function JobApplicationProvider({ children }: Props) {
     allApplications: allApplications,
     existingCV: storedCV,
     AIresponse: null,
+    applicationTrackingList: applicationTrackingList,
   });
 
   return (
