@@ -105,17 +105,17 @@ function TrackApplicationPage() {
         </span>
       </h2> */}
 
-      <section className="my-4 md:my-8 flex items-center gap-4">
+      <section className="my-8 flex items-center gap-4">
         <Card className="w-50">
           <CardContent className="flex items-center justify-center flex-col">
             <p className="text-4xl font-bold text-gray-700">{data.length}</p>
-            <p className=" text-gray-400">Total applications</p>
+            <p className=" text-gray-400 text-center">Applications</p>
           </CardContent>
         </Card>
         <Card className="w-50">
           <CardContent className="flex items-center justify-center flex-col">
             <p className="text-4xl font-bold text-gray-700">{appliedCount}</p>
-            <p className=" text-gray-400">Total applied</p>
+            <p className=" text-gray-400 text-center">Applied</p>
           </CardContent>
         </Card>
         <Card className="w-50">
@@ -123,13 +123,13 @@ function TrackApplicationPage() {
             <p className="text-4xl font-bold text-gray-700">
               {responsesReceived}
             </p>
-            <p className=" text-gray-400">Response received</p>
+            <p className=" text-gray-400 text-center">Responses</p>
           </CardContent>
         </Card>
         {/* <Card className="w-50">
           <CardContent className="flex items-center justify-center flex-col">
             <p className="text-4xl font-bold text-gray-700">3</p>
-            <p className=" text-gray-400">Applied this week</p>
+            <p className="text-gray-400 text-center">Applied this week</p>
           </CardContent>
         </Card> */}
       </section>

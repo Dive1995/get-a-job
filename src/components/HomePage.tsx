@@ -52,12 +52,12 @@ function HomePage() {
 
       <section>
         {data.length > 0 && (
-          <h3 className="text-xl mt-8 font-semibold text-gray-600 my-2">
+          <h3 className="text-xl mt-8 mb-4 text-center sm:text-start font-semibold text-gray-600 my-2">
             📂 Recent applications
           </h3>
         )}
         {/* Make it Grid */}
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-wrap">
           {data.map((item, index) => (
             <Link to={`/application/${index}`}>
               <Card className=" w-90 hover:shadow-md" key={index}>

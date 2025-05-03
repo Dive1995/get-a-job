@@ -142,7 +142,7 @@ function TrackApplicationDialog({
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-gray-700">📍 Language</Label>
+            <Label className="text-gray-700">🌐 Language</Label>
             <Input
               value={language}
               onChange={(e) => setLanguage(e.target.value)}

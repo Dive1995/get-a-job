@@ -149,7 +149,7 @@ function NewApplicationPage() {
 
       <Button
         onClick={generateJobApplication}
-        className={`my-4 bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:opacity-90 transition duration-300 disabled:cursor-not-allowed`}
+        className={`w-full sm:w-20 my-4 bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:opacity-90 transition duration-300 disabled:cursor-not-allowed`}
         disabled={cv == null || jobDescription == null || jobDescription == ""}>
         Generate
       </Button>
