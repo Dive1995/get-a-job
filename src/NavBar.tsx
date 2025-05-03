@@ -29,7 +29,7 @@ function NavBar() {
                 </div>
               </Link>
               <div className="hidden sm:block sm:ml-6">
-                <div className="flex space-x-4 text-green-500">
+                <div className="flex space-x-4 text-[#4fa252]">
                   <Link
                     to={"/"}
                     className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium"

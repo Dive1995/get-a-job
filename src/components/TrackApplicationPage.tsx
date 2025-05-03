@@ -155,8 +155,8 @@ function TrackApplicationPage() {
               <TableHead>Location</TableHead>
               <TableHead>Language</TableHead>
               <TableHead>Site</TableHead>
-              <TableHead>status</TableHead>
-              <TableHead>applied on</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Applied on</TableHead>
               <TableHead>Edit</TableHead>
               {/* <TableHead className="text-right">Amount</TableHead> */}
             </TableRow>

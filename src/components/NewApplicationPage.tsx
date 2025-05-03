@@ -101,8 +101,8 @@ function NewApplicationPage() {
   return (
     <div>
       <h2 className="text-3xl font-bold">
-        <span className="mr-2">⭐</span>
-        <span className="bg-gradient-to-tr from-cyan-300 via-teal-400 to-green-400 bg-clip-text text-transparent">
+        <span className="mr-2">🚀</span>
+        <span className="text-[#4fa252]">
           One step closer to your dream job.
         </span>
       </h2>
