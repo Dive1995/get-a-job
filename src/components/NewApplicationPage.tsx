@@ -39,11 +39,12 @@ function NewApplicationPage() {
       setLoading(false);
 
       if (response.text) {
+        const cleanedText = sanitizeJson(response.text);
         dispatch({
           type: "SET_AI_RESPONSE",
-          payload: JSON.parse(response.text),
+          payload: JSON.parse(cleanedText),
         });
-        const index = saveResponse(response.text);
+        const index = saveResponse(cleanedText);
         navigate(`/application/${index}`);
       } else {
         toast("Failed to Generate response, try again!!");
@@ -53,6 +54,17 @@ function NewApplicationPage() {
       console.log(e);
     }
   };
+
+  function sanitizeJson(jsonString: string) {
+    return (
+      jsonString
+        // Remove unescaped control characters except \n, \t (e.g. \u0000 - \u001F, \u007F)
+        // eslint-disable-next-line no-control-regex
+        .replace(/[\u0000-\u0019\u007F]/g, "")
+        // Replace raw newlines inside strings with escaped \n
+        .replace(/\r?\n/g, "\\n")
+    );
+  }
 
   const saveResponse = (response: string) => {
     if (cv) {
@@ -71,11 +83,11 @@ function NewApplicationPage() {
       siteUrl: null,
       status: responseData.jobTrackingMeta.applicationStatus,
       appliedOn: null,
-      applicationId: state.allApplications.length - 1, //TODO: double check, whether allApplication was alread updated or not
+      applicationId: state.allApplications.length, //TODO: double check, whether allApplication was alread updated or not
     };
     dispatch({ type: "TRACK_NEW_APPLICATION", payload: jobTrackingData });
 
-    return state.allApplications.length - 1;
+    return state.allApplications.length;
   };
 
   if (loading) {

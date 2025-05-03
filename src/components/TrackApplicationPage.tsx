@@ -21,6 +21,7 @@ function TrackApplicationPage() {
     state: { applicationTrackingList: data },
   } = useJobApplicationContext();
   const [responsesReceived, setResponsesReceived] = useState(0);
+  const [appliedCount, setAppliedCount] = useState(0);
 
   useEffect(() => {
     const count = data.reduce((prev, current) => {
@@ -31,6 +32,15 @@ function TrackApplicationPage() {
       return prev;
     }, 0);
     setResponsesReceived(count);
+
+    const applied = data.reduce((prev, current) => {
+      const status = current.status;
+      if (status == "applied") {
+        prev++;
+      }
+      return prev;
+    }, 0);
+    setAppliedCount(applied);
   }, [data]);
 
   const showApplicationStatus = (status: string) => {
@@ -99,6 +109,12 @@ function TrackApplicationPage() {
         <Card className="w-50">
           <CardContent className="flex items-center justify-center flex-col">
             <p className="text-4xl font-bold text-gray-700">{data.length}</p>
+            <p className=" text-gray-400">Total applications</p>
+          </CardContent>
+        </Card>
+        <Card className="w-50">
+          <CardContent className="flex items-center justify-center flex-col">
+            <p className="text-4xl font-bold text-gray-700">{appliedCount}</p>
             <p className=" text-gray-400">Total applied</p>
           </CardContent>
         </Card>
@@ -107,20 +123,23 @@ function TrackApplicationPage() {
             <p className="text-4xl font-bold text-gray-700">
               {responsesReceived}
             </p>
-            <p className=" text-gray-400">Respons received</p>
+            <p className=" text-gray-400">Response received</p>
           </CardContent>
         </Card>
-        <Card className="w-50">
+        {/* <Card className="w-50">
           <CardContent className="flex items-center justify-center flex-col">
             <p className="text-4xl font-bold text-gray-700">3</p>
             <p className=" text-gray-400">Applied this week</p>
           </CardContent>
-        </Card>
+        </Card> */}
       </section>
 
       <section>
         <div className="flex justify-end my-4">
-          <TrackApplicationDialog title="Track new application" item={null}>
+          <TrackApplicationDialog
+            title="Track new application"
+            item={null}
+            index={null}>
             <Button variant="secondary">
               <Plus /> Track new Application
             </Button>
@@ -143,7 +162,7 @@ function TrackApplicationPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item) => {
+            {data.map((item, index) => {
               const status = showApplicationStatus(item.status);
               return (
                 <TableRow>
@@ -172,6 +191,7 @@ function TrackApplicationPage() {
                     {/* Edit modal */}
                     <TrackApplicationDialog
                       title="Edit Application"
+                      index={index}
                       item={item}>
                       <Button variant="outline">Edit</Button>
                     </TrackApplicationDialog>

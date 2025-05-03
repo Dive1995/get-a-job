@@ -19,7 +19,10 @@ type Actions =
   | { type: "UPDATE_APPLICATION"; payload: JobApplicationModel }
   | { type: "ADD_APPLICATION"; payload: JobApplicationModel }
   | { type: "TRACK_NEW_APPLICATION"; payload: JobTrackingModel }
-  | { type: "UPDATE_TRACK_APPLICATION"; payload: JobTrackingModel };
+  | {
+      type: "UPDATE_TRACK_APPLICATION";
+      payload: { id: number; data: JobTrackingModel }; //TODO: change this once DB is integrated
+    };
 
 type StateType = {
   allApplications: JobApplicationModel[];
@@ -58,13 +61,29 @@ const reducer = (state: StateType, action: Actions) => {
         JSON.stringify(state.allApplications)
       );
       return state;
-    case "TRACK_NEW_APPLICATION":
-      state.applicationTrackingList.push(action.payload);
+    case "TRACK_NEW_APPLICATION": {
+      const trackingList = state.applicationTrackingList;
+      trackingList.push(action.payload);
+
       localStorage.setItem(
         "applicationTrackingList",
-        JSON.stringify(action.payload)
+        JSON.stringify(trackingList)
       );
-      return state;
+      return { ...state, applicationTrackingList: trackingList };
+    }
+    case "UPDATE_TRACK_APPLICATION": {
+      const updatedList = state.applicationTrackingList.map((item, index) =>
+        index === action.payload.id ? action.payload.data : item
+      );
+      localStorage.setItem(
+        "applicationTrackingList",
+        JSON.stringify(updatedList)
+      );
+      return {
+        ...state,
+        applicationTrackingList: updatedList,
+      };
+    }
     case "STORE_CV":
       localStorage.setItem("existingCV", action.payload);
       return { ...state, existingCV: action.payload };

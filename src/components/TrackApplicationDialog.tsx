@@ -21,29 +21,47 @@ import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 
 type Props = {
   item: JobTrackingModel | null;
+  index: number | null;
   title: string;
   children: React.ReactNode;
 };
 
-function TrackApplicationDialog({ item, title, children }: Props) {
+function TrackApplicationDialog({
+  item,
+  title,
+  children,
+  index = null,
+}: Props) {
+  const [open, setOpen] = useState(false);
   const [position, setPosition] = useState(item?.position || "");
   const [company, setCompany] = useState(item?.company || "");
   const [location, setLocation] = useState(item?.location || "");
   const [language, setLanguage] = useState(item?.language || "");
-  const [appliedOn, setAppliedOn] = useState("");
+  const [appliedOn, setAppliedOn] = useState(item?.appliedOn || "");
   const [status, setStatus] = useState("notApplied");
+
+  const today = new Date().toISOString().split("T")[0];
 
   const { dispatch } = useJobApplicationContext();
 
   const updateTrackingApplication = () => {
-    console.log("Position: ", position);
-    console.log("company: ", company);
-    console.log("loca: ", location);
-    console.log("date: ", appliedOn);
-    console.log("status: ", status);
-
-    if (item) {
+    if (item && index != null) {
       // update existing tracking data
+      dispatch({
+        type: "UPDATE_TRACK_APPLICATION",
+        payload: {
+          id: index,
+          data: {
+            ...item,
+            status,
+            position,
+            company,
+            location,
+            language,
+            appliedOn,
+          },
+        },
+      });
     } else {
       // new tracking data
       dispatch({
@@ -60,10 +78,11 @@ function TrackApplicationDialog({ item, title, children }: Props) {
         },
       });
     }
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -77,6 +96,7 @@ function TrackApplicationDialog({ item, title, children }: Props) {
                 type="date"
                 value={appliedOn}
                 onChange={(e) => setAppliedOn(e.target.value)}
+                max={today}
               />
             </div>
             <div className="space-y-2">
