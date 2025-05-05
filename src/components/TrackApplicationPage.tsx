@@ -1,3 +1,14 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Card, CardContent } from "./ui/card";
 import {
   Table,
@@ -11,7 +22,7 @@ import {
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Plus } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import TrackApplicationDialog from "./TrackApplicationDialog";
 import { Link } from "react-router-dom";
 import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
@@ -19,6 +30,7 @@ import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 function TrackApplicationPage() {
   const {
     state: { applicationTrackingList: data },
+    dispatch,
   } = useJobApplicationContext();
   const [responsesReceived, setResponsesReceived] = useState(0);
   const [appliedCount, setAppliedCount] = useState(0);
@@ -35,7 +47,7 @@ function TrackApplicationPage() {
 
     const applied = data.reduce((prev, current) => {
       const status = current.status;
-      if (status == "applied") {
+      if (status != "notApplied") {
         prev++;
       }
       return prev;
@@ -95,6 +107,10 @@ function TrackApplicationPage() {
         };
     }
   };
+
+  function removeTrackingApplication(id: number) {
+    dispatch({ type: "REMOVE_TRACKING_APPLICATION", payload: id });
+  }
 
   return (
     <div>
@@ -157,7 +173,7 @@ function TrackApplicationPage() {
               <TableHead>Site</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Applied on</TableHead>
-              <TableHead>Edit</TableHead>
+              <TableHead>Actions</TableHead>
               {/* <TableHead className="text-right">Amount</TableHead> */}
             </TableRow>
           </TableHeader>
@@ -167,7 +183,7 @@ function TrackApplicationPage() {
               return (
                 <TableRow>
                   <TableCell>
-                    {item.applicationId ? (
+                    {item.applicationId != null ? (
                       <Link
                         to={`/application/${item.applicationId}`}
                         className="underline">
@@ -193,8 +209,40 @@ function TrackApplicationPage() {
                       title="Edit Application"
                       index={index}
                       item={item}>
-                      <Button variant="outline">Edit</Button>
+                      <Button variant="ghost">
+                        <Edit />
+                      </Button>
                     </TrackApplicationDialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="w-full sm:w-auto  hover:bg-red-500 hover:text-white">
+                          <Trash2 />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the response.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() =>
+                              removeTrackingApplication(item.trackingId)
+                            }
+                            className="bg-red-500 hover:bg-red-600 text-white">
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                   {/* <TableCell className="font-medium">INV001</TableCell>
                 <TableCell>Paid</TableCell>

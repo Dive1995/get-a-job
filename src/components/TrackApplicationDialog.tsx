@@ -42,7 +42,7 @@ function TrackApplicationDialog({
 
   const today = new Date().toISOString().split("T")[0];
 
-  const { dispatch } = useJobApplicationContext();
+  const { state, dispatch } = useJobApplicationContext();
 
   const updateTrackingApplication = () => {
     if (item && index != null) {
@@ -71,6 +71,7 @@ function TrackApplicationDialog({
           location,
           appliedOn,
           applicationId: null,
+          trackingId: state.applicationTrackingList.length,
           company,
           language,
           status,
@@ -112,7 +113,7 @@ function TrackApplicationDialog({
                   <SelectItem value="notApplied">Not applied</SelectItem>
                   <SelectItem value="applied">Applied</SelectItem>
                   <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="call">Call Received</SelectItem>
+                  <SelectItem value="callreceived">Call Received</SelectItem>
                   <SelectItem value="interview">Interview</SelectItem>
                   <SelectItem value="selected">Selected</SelectItem>
                   <SelectItem value="rejected">Rejected</SelectItem>

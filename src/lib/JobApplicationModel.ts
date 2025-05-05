@@ -45,6 +45,7 @@ export interface JobApplicationModel {
   };
 
   jobTrackingMeta: {
+    id: number | null;
     company: string;
     jobTitle: string;
     location: string;

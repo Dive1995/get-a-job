@@ -72,6 +72,7 @@ function NewApplicationPage() {
     }
     // store application data
     const responseData: JobApplicationModel = JSON.parse(response);
+    responseData.jobTrackingMeta.id = state.applicationTrackingList.length;
     dispatch({ type: "ADD_APPLICATION", payload: responseData });
 
     // store tracking data
@@ -84,6 +85,7 @@ function NewApplicationPage() {
       status: responseData.jobTrackingMeta.applicationStatus,
       appliedOn: null,
       applicationId: state.allApplications.length, //TODO: double check, whether allApplication was alread updated or not
+      trackingId: state.applicationTrackingList.length,
     };
     dispatch({ type: "TRACK_NEW_APPLICATION", payload: jobTrackingData });
 

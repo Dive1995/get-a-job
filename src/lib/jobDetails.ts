@@ -253,6 +253,7 @@ t explicitly add the contents from the resume, try to reconstruct it a bit."
 "type": "object",
 "description": "Information for tracking this job application",
 "properties": {
+"id": null,
 "company": { "type": "string" },
 "jobTitle": { "type": "string" },
 "location": { "type": "string" },
@@ -396,6 +397,7 @@ t explicitly add the contents from the resume, try to reconstruct it a bit."
     ]
   },
   "jobTrackingMeta": {
+    "id": null
     "company": "W11K GmbH",
     "jobTitle": "WORKING STUDENT WEB DEVELOPMENT (M/F/D)",
     "location": "Stuttgart, Baden-Württemberg, Germany",

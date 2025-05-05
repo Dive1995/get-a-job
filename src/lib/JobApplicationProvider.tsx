@@ -18,6 +18,8 @@ type Actions =
   | { type: "REMOVE_APPLICATION"; payload: number }
   | { type: "UPDATE_APPLICATION"; payload: JobApplicationModel }
   | { type: "ADD_APPLICATION"; payload: JobApplicationModel }
+  | { type: "REMOVE_APPLICATION"; payload: number }
+  | { type: "REMOVE_TRACKING_APPLICATION"; payload: number }
   | { type: "TRACK_NEW_APPLICATION"; payload: JobTrackingModel }
   | {
       type: "UPDATE_TRACK_APPLICATION";
@@ -61,6 +63,29 @@ const reducer = (state: StateType, action: Actions) => {
         JSON.stringify(state.allApplications)
       );
       return state;
+    case "REMOVE_APPLICATION": {
+      const applications = state.allApplications;
+      applications.splice(action.payload, 1);
+      localStorage.setItem("allApplications", JSON.stringify(applications));
+      return { ...state, allApplications: applications };
+    }
+    case "REMOVE_TRACKING_APPLICATION": {
+      const applications = state.applicationTrackingList;
+      const index = applications.findIndex(
+        (item) => item.trackingId == action.payload
+      );
+
+      if (index > -1) {
+        applications.splice(index, 1);
+        localStorage.setItem(
+          "applicationTrackingList",
+          JSON.stringify(applications)
+        );
+        return { ...state, applicationTrackingList: applications };
+      } else {
+        return state;
+      }
+    }
     case "TRACK_NEW_APPLICATION": {
       const trackingList = state.applicationTrackingList;
       trackingList.push(action.payload);

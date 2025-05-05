@@ -7,4 +7,5 @@ export interface JobTrackingModel {
   status: string;
   appliedOn: string | null;
   applicationId: number | null;
+  trackingId: number;
 }
