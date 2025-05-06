@@ -57,4 +57,5 @@ export interface JobApplicationModel {
     applicationStatus: string; // Consider changing this to a literal type if it's always "notApplied"
     appliedDate: string; // Format: "YYYY-MM-DD"
   };
+  jobDescription: string | null;
 }

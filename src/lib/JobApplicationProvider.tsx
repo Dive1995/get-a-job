@@ -16,7 +16,10 @@ type Actions =
   | { type: "STORE_CV"; payload: string }
   | { type: "SET_AI_RESPONSE"; payload: JobApplicationModel }
   | { type: "REMOVE_APPLICATION"; payload: number }
-  | { type: "UPDATE_APPLICATION"; payload: JobApplicationModel }
+  | {
+      type: "UPDATE_APPLICATION";
+      payload: { id: number; data: JobApplicationModel };
+    }
   | { type: "ADD_APPLICATION"; payload: JobApplicationModel }
   | { type: "REMOVE_APPLICATION"; payload: number }
   | { type: "REMOVE_TRACKING_APPLICATION"; payload: number }
@@ -107,6 +110,16 @@ const reducer = (state: StateType, action: Actions) => {
       return {
         ...state,
         applicationTrackingList: updatedList,
+      };
+    }
+    case "UPDATE_APPLICATION": {
+      const updatedList = state.allApplications.map((item, index) =>
+        index === action.payload.id ? action.payload.data : item
+      );
+      localStorage.setItem("allApplications", JSON.stringify(updatedList));
+      return {
+        ...state,
+        allApplications: updatedList,
       };
     }
     case "STORE_CV":

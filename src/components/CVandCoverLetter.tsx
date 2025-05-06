@@ -25,23 +25,21 @@ function CVandCoverLetter() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   const { state, dispatch } = useJobApplicationContext();
   const [data, setData] = useState<JobApplicationModel | null>();
 
   useEffect(() => {
-    console.log("id: ", id);
     if (id) {
       const index = parseInt(id, 10);
       const found = state.allApplications[index];
       setData(found);
+      setLoading(false);
     }
-  }, [id]);
+  }, [id, state]);
 
   const removeTrackingApplication = () => {
-    console.log("id: ", id);
-    console.log("data: ", data);
     if (id && data?.jobTrackingMeta.id != null) {
-      console.log("Deltet");
       dispatch({ type: "REMOVE_APPLICATION", payload: parseInt(id, 10) });
       dispatch({
         type: "REMOVE_TRACKING_APPLICATION",
@@ -53,6 +51,14 @@ function CVandCoverLetter() {
 
   if (!data) {
     return <NotFound />;
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[600px]">
+        <span className="text-6xl animate-ping">✨</span>
+      </div>
+    );
   }
 
   return (
@@ -132,7 +138,11 @@ function CVandCoverLetter() {
         </TabsContent>
       </Tabs>
       <div className="flex flex-col sm:flex-row space-y-2 space-x-2">
-        <RegenerateResponseDialog>
+        <RegenerateResponseDialog
+          cv={state.existingCV!}
+          jobDescription={data.jobDescription!}
+          setLoading={setLoading}
+          id={parseInt(id!, 10)}>
           <Button
             className={`w-full sm:w-auto bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4  shadow-md hover:opacity-90 transition duration-300 disabled:cursor-not-allowed`}>
             Regenerate

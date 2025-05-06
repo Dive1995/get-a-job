@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -8,13 +8,34 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Textarea } from "./ui/textarea";
+import useGenerateJobResponse from "@/lib/hooks/useGenerateJobResponse";
 
 type Props = {
+  id: number;
+  cv: string;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  jobDescription: string;
   children: React.ReactNode;
 };
 
-function RegenerateResponseDialog({ children }: Props) {
+function RegenerateResponseDialog({
+  setLoading,
+  id,
+  cv,
+  jobDescription,
+  children,
+}: Props) {
   const [customText, setCustomText] = useState("");
+  const { generateJobApplication, loading } = useGenerateJobResponse(
+    cv,
+    jobDescription,
+    customText,
+    id
+  );
+
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading]);
 
   return (
     <Dialog>
@@ -34,6 +55,7 @@ function RegenerateResponseDialog({ children }: Props) {
             }}
           />
           <Button
+            onClick={generateJobApplication}
             className={`w-full mt-4 bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4  shadow-md hover:opacity-90 transition duration-300 disabled:cursor-not-allowed`}>
             Generate
           </Button>
