@@ -20,6 +20,8 @@ import NotFound from "./NotFound";
 import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 import { Button } from "./ui/button";
 import RegenerateResponseDialog from "./RegenerateResponseDialog";
+import { deleteDoc, doc } from "@firebase/firestore";
+import { db } from "@/lib/config/firebaseConfig";
 
 function CVandCoverLetter() {
   const { id } = useParams();
@@ -31,20 +33,30 @@ function CVandCoverLetter() {
 
   useEffect(() => {
     if (id) {
-      const index = parseInt(id, 10);
-      const found = state.allApplications[index];
+      const found = state.allApplications.find((item) => (item.id = id));
       setData(found);
       setLoading(false);
     }
   }, [id, state]);
 
-  const removeTrackingApplication = () => {
-    if (id && data?.jobTrackingMeta.id != null) {
-      dispatch({ type: "REMOVE_APPLICATION", payload: parseInt(id, 10) });
-      dispatch({
-        type: "REMOVE_TRACKING_APPLICATION",
-        payload: data?.jobTrackingMeta.id,
-      });
+  const removeTrackingApplication = async () => {
+    if (id != null) {
+      const jobRef = doc(db, "allApplications", id);
+      await deleteDoc(jobRef);
+      dispatch({ type: "REMOVE_APPLICATION", payload: id });
+
+      const trackingItem = state.applicationTrackingList.find(
+        (item) => item.applicationId == id
+      );
+
+      if (trackingItem) {
+        const trackingRef = doc(db, "applicationTrackingList", trackingItem.id);
+        await deleteDoc(trackingRef);
+        dispatch({
+          type: "REMOVE_TRACKING_APPLICATION",
+          payload: trackingItem.id,
+        });
+      }
       navigate(`/`);
     }
   };
@@ -139,10 +151,10 @@ function CVandCoverLetter() {
       </Tabs>
       <div className="flex flex-col sm:flex-row space-y-2 space-x-2">
         <RegenerateResponseDialog
-          cv={state.existingCV!}
+          cv={state.existingCV?.value ?? ""}
           jobDescription={data.jobDescription!}
           setLoading={setLoading}
-          id={parseInt(id!, 10)}>
+          id={id!}>
           <Button
             className={`w-full sm:w-auto bg-gradient-to-r from-cyan-400 via-teal-400 to-green-400 text-white font-semibold py-2 px-4  shadow-md hover:opacity-90 transition duration-300 disabled:cursor-not-allowed`}>
             Regenerate

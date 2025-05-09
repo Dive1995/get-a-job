@@ -1,4 +1,5 @@
 export interface JobApplicationModel {
+  id: string;
   coverLetter: string;
 
   company: {
@@ -45,7 +46,6 @@ export interface JobApplicationModel {
   };
 
   jobTrackingMeta: {
-    id: number | null;
     company: string;
     jobTitle: string;
     location: string;
@@ -59,3 +59,5 @@ export interface JobApplicationModel {
   };
   jobDescription: string | null;
 }
+
+// export type FirestoreJobApplicationModel = JobApplicationModel & { id: string };

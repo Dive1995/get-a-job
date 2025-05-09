@@ -26,6 +26,8 @@ import { Edit, Plus, Trash2 } from "lucide-react";
 import TrackApplicationDialog from "./TrackApplicationDialog";
 import { Link } from "react-router-dom";
 import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/config/firebaseConfig";
 
 function TrackApplicationPage() {
   const {
@@ -108,7 +110,9 @@ function TrackApplicationPage() {
     }
   };
 
-  function removeTrackingApplication(id: number) {
+  async function removeTrackingApplication(id: string) {
+    const jobRef = doc(db, "applicationTrackingList", id);
+    await deleteDoc(jobRef);
     dispatch({ type: "REMOVE_TRACKING_APPLICATION", payload: id });
   }
 
@@ -155,7 +159,7 @@ function TrackApplicationPage() {
           <TrackApplicationDialog
             title="Track new application"
             item={null}
-            index={null}>
+            id={null}>
             <Button variant="secondary">
               <Plus /> Track new Application
             </Button>
@@ -178,7 +182,7 @@ function TrackApplicationPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item, index) => {
+            {data.map((item) => {
               const status = showApplicationStatus(item.status);
               return (
                 <TableRow>
@@ -207,7 +211,7 @@ function TrackApplicationPage() {
                     {/* Edit modal */}
                     <TrackApplicationDialog
                       title="Edit Application"
-                      index={index}
+                      id={item.id}
                       item={item}>
                       <Button variant="ghost">
                         <Edit />
@@ -234,9 +238,7 @@ function TrackApplicationPage() {
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
                           <AlertDialogAction
-                            onClick={() =>
-                              removeTrackingApplication(item.trackingId)
-                            }
+                            onClick={() => removeTrackingApplication(item.id)}
                             className="bg-red-500 hover:bg-red-600 text-white">
                             Delete
                           </AlertDialogAction>

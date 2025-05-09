@@ -10,7 +10,7 @@ function NewApplicationPage() {
   const { state } = useJobApplicationContext();
 
   const [jobDescription, setJobDescription] = useState<string>("");
-  const [cv, setCv] = useState<string>(state.existingCV || "");
+  const [cv, setCv] = useState<string>(state.existingCV?.value || "");
   const [additional, setAdditional] = useState<string | null>(null);
 
   const { loading, generateJobApplication } = useGenerateJobResponse(

@@ -18,20 +18,17 @@ import { Label } from "./ui/label";
 import { useState } from "react";
 import { JobTrackingModel } from "@/lib/JobTrackingModel";
 import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/config/firebaseConfig";
 
 type Props = {
   item: JobTrackingModel | null;
-  index: number | null;
+  id: string | null;
   title: string;
   children: React.ReactNode;
 };
 
-function TrackApplicationDialog({
-  item,
-  title,
-  children,
-  index = null,
-}: Props) {
+function TrackApplicationDialog({ item, title, children, id = null }: Props) {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState(item?.position || "");
   const [company, setCompany] = useState(item?.company || "");
@@ -42,42 +39,46 @@ function TrackApplicationDialog({
 
   const today = new Date().toISOString().split("T")[0];
 
-  const { state, dispatch } = useJobApplicationContext();
+  const { dispatch } = useJobApplicationContext();
 
-  const updateTrackingApplication = () => {
-    if (item && index != null) {
+  const updateTrackingApplication = async () => {
+    if (item && id != null) {
       // update existing tracking data
+      const updatedTrackAppl = {
+        ...item,
+        status,
+        position,
+        company,
+        location,
+        language,
+        appliedOn,
+      };
+
+      const jobRef = doc(db, "applicationTrackingList", id);
+      await setDoc(jobRef, updatedTrackAppl);
       dispatch({
         type: "UPDATE_TRACK_APPLICATION",
-        payload: {
-          id: index,
-          data: {
-            ...item,
-            status,
-            position,
-            company,
-            location,
-            language,
-            appliedOn,
-          },
-        },
+        payload: updatedTrackAppl,
       });
     } else {
       // new tracking data
-      dispatch({
-        type: "TRACK_NEW_APPLICATION",
-        payload: {
-          position,
-          location,
-          appliedOn,
-          applicationId: null,
-          trackingId: state.applicationTrackingList.length,
-          company,
-          language,
-          status,
-          siteUrl: null,
-        },
-      });
+      const newTrackingDocRef = doc(collection(db, "applicationTrackingList"));
+
+      const jobTrackingData: JobTrackingModel = {
+        id: newTrackingDocRef.id, // pass the created id
+        position,
+        company,
+        location,
+        language,
+        siteUrl: null,
+        status,
+        appliedOn,
+        applicationId: null,
+      };
+
+      // Write the data to Firestore
+      await setDoc(newTrackingDocRef, jobTrackingData);
+      dispatch({ type: "TRACK_NEW_APPLICATION", payload: jobTrackingData });
     }
     setOpen(false);
   };

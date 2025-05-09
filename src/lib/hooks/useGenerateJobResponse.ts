@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { JobApplicationModel } from "../JobApplicationModel";
 import { JobTrackingModel } from "../JobTrackingModel";
 import { generateJobDetails } from "../jobDetails";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../config/firebaseConfig";
 
 export default function useGenerateJobResponse(
   cv: string,
   jobDescription: string,
   additional: string | null = null,
-  index: number | null = null
+  id: string | null = null
 ) {
   const { state, dispatch } = useJobApplicationContext();
   const [loading, setLoading] = useState(false);
@@ -38,8 +40,8 @@ export default function useGenerateJobResponse(
           type: "SET_AI_RESPONSE",
           payload: JSON.parse(cleanedText),
         });
-        const index = saveResponse(cleanedText);
-        navigate(`/application/${index}`);
+        const id = await saveResponse(cleanedText);
+        navigate(`/application/${id}`);
       } else {
         toast("Failed to Generate response, try again!!");
       }
@@ -60,23 +62,49 @@ export default function useGenerateJobResponse(
     );
   }
 
-  const saveResponse = (response: string) => {
+  const saveResponse = async (response: string) => {
     if (cv) {
-      dispatch({ type: "STORE_CV", payload: cv });
+      if (state.existingCV == null) {
+        const cvRef = doc(collection(db, "allApplications"));
+        await setDoc(cvRef, {
+          value: cv,
+        });
+
+        dispatch({ type: "STORE_CV", payload: { value: cv, id: cvRef.id } });
+      } else {
+        const cvRef = doc(db, "existingCV", state.existingCV.id);
+        await setDoc(cvRef, { value: cv });
+        dispatch({
+          type: "STORE_CV",
+          payload: { ...state.existingCV, value: cv },
+        });
+      }
     }
     // store application data
     const responseData: JobApplicationModel = JSON.parse(response);
 
     // if new generate call
     // save tracking, jobApplication
-    // return new index
-    if (index == null) {
-      responseData.jobTrackingMeta.id = state.applicationTrackingList.length;
+    // return new id
+    if (id == null) {
+      // responseData.jobTrackingMeta.id = state.applicationTrackingList.length;
       responseData.jobDescription = jobDescription;
+
+      const newApplRef = doc(collection(db, "allApplications"));
+      responseData.id = newApplRef.id;
+      await setDoc(newApplRef, responseData);
+
+      // const newDocRef = await addDoc(
+      //   collection(db, "allApplications"),
+      //   responseData
+      // );
       dispatch({ type: "ADD_APPLICATION", payload: responseData });
 
       // store tracking data
+      const newTrackingDocRef = doc(collection(db, "applicationTrackingList"));
+
       const jobTrackingData: JobTrackingModel = {
+        id: newTrackingDocRef.id, // pass the created id
         position: responseData.jobTrackingMeta.jobTitle,
         company: responseData.jobTrackingMeta.company,
         location: responseData.jobTrackingMeta.location,
@@ -84,26 +112,31 @@ export default function useGenerateJobResponse(
         siteUrl: null,
         status: responseData.jobTrackingMeta.applicationStatus,
         appliedOn: null,
-        applicationId: state.allApplications.length, //TODO: double check, whether allApplication was alread updated or not
-        trackingId: state.applicationTrackingList.length,
+        applicationId: newApplRef.id,
       };
+
+      // Write the data to Firestore
+      await setDoc(newTrackingDocRef, jobTrackingData);
       dispatch({ type: "TRACK_NEW_APPLICATION", payload: jobTrackingData });
 
-      return state.allApplications.length;
+      return newApplRef.id;
     }
 
     // if regenerate
     // update jobApplication, no need to update tracking details
-    // return old index
+    // return old id
     else {
-      responseData.jobTrackingMeta.id =
-        state.allApplications[index].jobTrackingMeta.id;
+      // responseData.jobTrackingMeta.id = state.allApplications[id].jobTrackingMeta.id;
       responseData.jobDescription = jobDescription;
+      const jobRef = doc(db, "allApplications", id);
+      const resp = await setDoc(jobRef, responseData);
+      console.log(resp);
+
       dispatch({
         type: "UPDATE_APPLICATION",
-        payload: { id: index, data: responseData },
+        payload: { id: id, data: responseData },
       });
-      return index;
+      return id;
     }
   };
 

@@ -1,4 +1,5 @@
 export interface JobTrackingModel {
+  id: string;
   position: string;
   company: string;
   location: string;
@@ -6,6 +7,5 @@ export interface JobTrackingModel {
   siteUrl: string | null;
   status: string;
   appliedOn: string | null;
-  applicationId: number | null;
-  trackingId: number;
+  applicationId: string | null;
 }

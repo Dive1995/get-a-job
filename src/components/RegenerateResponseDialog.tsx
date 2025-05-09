@@ -11,7 +11,7 @@ import { Textarea } from "./ui/textarea";
 import useGenerateJobResponse from "@/lib/hooks/useGenerateJobResponse";
 
 type Props = {
-  id: number;
+  id: string;
   cv: string;
   setLoading: Dispatch<SetStateAction<boolean>>;
   jobDescription: string;

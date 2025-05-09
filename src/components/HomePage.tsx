@@ -17,7 +17,7 @@ function HomePage() {
 
   useEffect(() => {
     setData(state.allApplications);
-  }, []);
+  }, [state.allApplications]);
 
   return (
     <div>
@@ -58,9 +58,9 @@ function HomePage() {
         )}
         {/* Make it Grid */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-wrap">
-          {data.map((item, index) => (
-            <Link to={`/application/${index}`}>
-              <Card className=" w-90 hover:shadow-md" key={index}>
+          {data.map((item) => (
+            <Link to={`/application/${item.id}`}>
+              <Card className=" w-90 hover:shadow-md" key={item.id}>
                 <CardHeader>
                   <CardTitle>{item.jobTrackingMeta.jobTitle}</CardTitle>
                   <CardDescription className="flex items-center">
