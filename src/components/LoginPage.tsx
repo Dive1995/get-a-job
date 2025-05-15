@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { GoogleAuthProvider } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftCircle } from "lucide-react";
-import google from "../../public/google.png";
 import { auth } from "@/lib/config/firebaseConfig";
 
 const provider = new GoogleAuthProvider();
@@ -22,7 +21,7 @@ const LoginPage = () => {
       //   };
 
       console.log("Logged in user:", user);
-      navigate("/");
+      navigate(`/applications`);
     } catch (error) {
       console.error("Google login error:", error);
     }
@@ -39,7 +38,7 @@ const LoginPage = () => {
           variant="outline"
           className="w-full gap-2"
           onClick={handleGoogleLogin}>
-          <img src={google} className="w-6 h-6" />
+          <img src="/google.png" className="w-6 h-6" />
           Sign in with Google
         </Button>
         <div className="flex items-center justify-center text-gray-500">

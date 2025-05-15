@@ -67,7 +67,7 @@ function CVandCoverLetter() {
           payload: trackingItem.id,
         });
       }
-      navigate(`/`);
+      navigate(`/applications`);
     }
   };
 

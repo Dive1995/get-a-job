@@ -60,27 +60,35 @@ function NavBar() {
                     About
                   </Link> */}
                   {user ? (
-                    <Popover>
-                      <PopoverTrigger>
-                        <Avatar>
-                          <AvatarImage
-                            src={user.photoURL || ""}
-                            alt="@shadcn"
-                          />
-                          <AvatarFallback>
-                            {user.displayName?.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                      </PopoverTrigger>
-                      <PopoverContent className="text-gray-800 w-40">
-                        <Button
-                          variant="outline"
-                          className="text-sm w-full"
-                          onClick={handleLogout}>
-                          Sign Out
-                        </Button>
-                      </PopoverContent>
-                    </Popover>
+                    <>
+                      <Link
+                        to={"/applications"}
+                        className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium"
+                        aria-current="page">
+                        Applications
+                      </Link>
+                      <Popover>
+                        <PopoverTrigger>
+                          <Avatar>
+                            <AvatarImage
+                              src={user.photoURL || ""}
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>
+                              {user.displayName?.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </PopoverTrigger>
+                        <PopoverContent className="text-gray-800 w-40">
+                          <Button
+                            variant="outline"
+                            className="text-sm w-full"
+                            onClick={handleLogout}>
+                            Sign Out
+                          </Button>
+                        </PopoverContent>
+                      </Popover>
+                    </>
                   ) : (
                     <Link
                       to={"/auth"}

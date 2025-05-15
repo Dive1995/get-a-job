@@ -43,7 +43,11 @@ function TrackApplicationPage() {
   useEffect(() => {
     const count = data.reduce((prev, current) => {
       const status = current.status;
-      if (status != "notApplied" && status != "applied") {
+      if (
+        status != "notApplied" &&
+        status != "applied" &&
+        status != "pending"
+      ) {
         prev++;
       }
       return prev;

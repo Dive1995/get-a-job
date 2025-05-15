@@ -9,13 +9,15 @@ import NotFound from "./components/NotFound.tsx";
 import Layout from "./components/Layout.tsx";
 import TrackApplicationPage from "./components/TrackApplicationPage.tsx";
 import LoginPage from "./components/LoginPage.tsx";
+import LandingPage from "./components/LandingPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <App /> },
+      { index: true, element: <LandingPage /> },
+      { path: "applications", element: <App /> },
       { path: "new", element: <NewApplicationPage /> },
       { path: "track", element: <TrackApplicationPage /> },
       { path: "application/:id", element: <CVandCoverLetter /> },
