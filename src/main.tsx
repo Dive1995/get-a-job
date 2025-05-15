@@ -10,6 +10,7 @@ import Layout from "./components/Layout.tsx";
 import TrackApplicationPage from "./components/TrackApplicationPage.tsx";
 import LoginPage from "./components/LoginPage.tsx";
 import LandingPage from "./components/LandingPage.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,41 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <LandingPage /> },
-      { path: "applications", element: <App /> },
+      // { path: "applications", element: <App /> },
+
+      {
+        path: "applications",
+        element: (
+          <PrivateRoute>
+            <App />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "new",
+        element: (
+          <PrivateRoute>
+            <NewApplicationPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "track",
+        element: (
+          <PrivateRoute>
+            <TrackApplicationPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "application/:id",
+        element: (
+          <PrivateRoute>
+            <CVandCoverLetter />
+          </PrivateRoute>
+        ),
+      },
+
       { path: "new", element: <NewApplicationPage /> },
       { path: "track", element: <TrackApplicationPage /> },
       { path: "application/:id", element: <CVandCoverLetter /> },

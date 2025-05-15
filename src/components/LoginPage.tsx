@@ -12,16 +12,15 @@ const LoginPage = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      await signInWithPopup(auth, provider);
+
       //   const userDetailsToSave = {
       //     name: user.displayName,
       //     photo: user.photoURL,
       //     uid: user.uid,
       //   };
 
-      console.log("Logged in user:", user);
-      navigate(`/applications`);
+      navigate(`/`);
     } catch (error) {
       console.error("Google login error:", error);
     }

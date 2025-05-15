@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
@@ -13,9 +13,11 @@ export default function LandingPage() {
           Create tailored cover letters and CVs with AI, and track your job
           applications — all in one place.
         </p>
-        <Button className="text-white bg-white/20 hover:bg-white/30">
+        <Link
+          to="/applications"
+          className="text-white p-3 rounded-xl bg-white/20 hover:bg-white/30">
           Get Started For Free
-        </Button>
+        </Link>
       </section>
 
       {/* Features */}
@@ -70,9 +72,11 @@ export default function LandingPage() {
         <p className="text-lg mb-6">
           Join other professionals using AI to simplify their job search.
         </p>
-        <Button className="bg-white text-[#4fa252] hover:bg-gray-100">
+        <Link
+          to={"/applications"}
+          className="bg-white text-[#4fa252] hover:bg-gray-100 p-3 rounded-2xl font-semibold">
           Try It Now
-        </Button>
+        </Link>
       </section>
     </main>
   );
