@@ -8,6 +8,7 @@ import CVandCoverLetter from "./components/CVandCoverLetter.tsx";
 import NotFound from "./components/NotFound.tsx";
 import Layout from "./components/Layout.tsx";
 import TrackApplicationPage from "./components/TrackApplicationPage.tsx";
+import LoginPage from "./components/LoginPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: "*", element: <NotFound /> },
     ],
   },
+  { path: "auth", element: <LoginPage /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(

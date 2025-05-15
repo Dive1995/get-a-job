@@ -3,6 +3,7 @@ import { JobApplicationModel } from "./JobApplicationModel";
 import { JobTrackingModel } from "./JobTrackingModel";
 import { db } from "./config/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import { useAuth } from "./UserContext";
 
 type Actions =
   | { type: "STORE_CV"; payload: { value: string; id: string } }
@@ -121,6 +122,8 @@ const reducer = (state: StateType, action: Actions) => {
 type Props = { children: React.ReactNode };
 
 function JobApplicationProvider({ children }: Props) {
+  const { user } = useAuth();
+
   const [state, dispatch] = useReducer(reducer, {
     allApplications: [],
     existingCV: null,
@@ -129,46 +132,63 @@ function JobApplicationProvider({ children }: Props) {
   });
 
   useEffect(() => {
-    const fetchAllApplications = async () => {
-      const querySnapshot = await getDocs(collection(db, "allApplications"));
-      const apps: JobApplicationModel[] = querySnapshot.docs.map((doc) => ({
-        ...(doc.data() as JobApplicationModel),
-        id: doc.id,
-      }));
+    // const fetchAllApplications = async () => {
+    //   const querySnapshot = await getDocs(collection(db, "allApplications"));
+    //   const apps: JobApplicationModel[] = querySnapshot.docs.map((doc) => ({
+    //     ...(doc.data() as JobApplicationModel),
+    //     id: doc.id,
+    //   }));
 
-      dispatch({ type: "INITIALIZE_ALL_APPLICATIONS", payload: apps });
-    };
+    //   dispatch({ type: "INITIALIZE_ALL_APPLICATIONS", payload: apps });
+    // };
 
-    const fetchTrackingApplications = async () => {
-      const querySnapshot = await getDocs(
-        collection(db, "applicationTrackingList")
-      );
-      const apps: JobTrackingModel[] = querySnapshot.docs.map((doc) => ({
-        ...(doc.data() as JobTrackingModel),
-        id: doc.id,
-      }));
-
-      dispatch({ type: "INITIALIZE_ALL_TRACKING_APPLICATIONS", payload: apps });
-    };
-
-    const fetchExistingCV = async () => {
-      const querySnapshot = await getDocs(
-        collection(db, "applicationTrackingList")
-      );
-      const apps: { value: string; id: string } = querySnapshot.docs.map(
-        (doc) => ({
-          value: doc.data().value,
+    if (user?.uid) {
+      const fetchAllApplications = async () => {
+        const querySnapshot = await getDocs(
+          collection(db, "users", user.uid, "applications")
+        );
+        const apps: JobApplicationModel[] = querySnapshot.docs.map((doc) => ({
+          ...(doc.data() as JobApplicationModel),
           id: doc.id,
-        })
-      )[0];
+        }));
 
-      dispatch({ type: "STORE_CV", payload: apps });
-    };
+        dispatch({ type: "INITIALIZE_ALL_APPLICATIONS", payload: apps });
+      };
 
-    fetchAllApplications();
-    fetchTrackingApplications();
-    fetchExistingCV();
-  }, []);
+      const fetchTrackingApplications = async () => {
+        const querySnapshot = await getDocs(
+          collection(db, "users", user.uid, "tracking")
+        );
+        const apps: JobTrackingModel[] = querySnapshot.docs.map((doc) => ({
+          ...(doc.data() as JobTrackingModel),
+          id: doc.id,
+        }));
+
+        dispatch({
+          type: "INITIALIZE_ALL_TRACKING_APPLICATIONS",
+          payload: apps,
+        });
+      };
+
+      const fetchExistingCV = async () => {
+        const querySnapshot = await getDocs(
+          collection(db, "users", user.uid, "cv")
+        );
+        const apps: { value: string; id: string } = querySnapshot.docs.map(
+          (doc) => ({
+            value: doc.data().value,
+            id: doc.id,
+          })
+        )[0];
+
+        dispatch({ type: "STORE_CV", payload: apps });
+      };
+
+      fetchAllApplications();
+      fetchTrackingApplications();
+      fetchExistingCV();
+    }
+  }, [user]);
 
   return (
     <JobApplicationContext.Provider value={{ state, dispatch }}>

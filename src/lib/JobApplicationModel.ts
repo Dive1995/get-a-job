@@ -60,4 +60,6 @@ export interface JobApplicationModel {
   jobDescription: string | null;
 }
 
-// export type FirestoreJobApplicationModel = JobApplicationModel & { id: string };
+export type FirestoreJobApplicationModel = JobApplicationModel & {
+  userId: string;
+};

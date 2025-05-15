@@ -22,10 +22,12 @@ import { Button } from "./ui/button";
 import RegenerateResponseDialog from "./RegenerateResponseDialog";
 import { deleteDoc, doc } from "@firebase/firestore";
 import { db } from "@/lib/config/firebaseConfig";
+import { useAuth } from "@/lib/UserContext";
 
 function CVandCoverLetter() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const { state, dispatch } = useJobApplicationContext();
@@ -40,7 +42,7 @@ function CVandCoverLetter() {
   }, [id, state]);
 
   const removeTrackingApplication = async () => {
-    if (id != null) {
+    if (id != null && user?.uid != null) {
       const jobRef = doc(db, "allApplications", id);
       await deleteDoc(jobRef);
       dispatch({ type: "REMOVE_APPLICATION", payload: id });
@@ -50,7 +52,15 @@ function CVandCoverLetter() {
       );
 
       if (trackingItem) {
-        const trackingRef = doc(db, "applicationTrackingList", trackingItem.id);
+        // const trackingRef = doc(db, "applicationTrackingList", trackingItem.id);
+        const trackingRef = doc(
+          db,
+          "users",
+          user.uid,
+          "tracking",
+          trackingItem.id
+        );
+
         await deleteDoc(trackingRef);
         dispatch({
           type: "REMOVE_TRACKING_APPLICATION",

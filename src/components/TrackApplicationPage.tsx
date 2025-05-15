@@ -28,8 +28,11 @@ import { Link } from "react-router-dom";
 import { useJobApplicationContext } from "@/lib/JobApplicationProvider";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/config/firebaseConfig";
+import { useAuth } from "@/lib/UserContext";
 
 function TrackApplicationPage() {
+  const { user } = useAuth();
+
   const {
     state: { applicationTrackingList: data },
     dispatch,
@@ -111,9 +114,13 @@ function TrackApplicationPage() {
   };
 
   async function removeTrackingApplication(id: string) {
-    const jobRef = doc(db, "applicationTrackingList", id);
-    await deleteDoc(jobRef);
-    dispatch({ type: "REMOVE_TRACKING_APPLICATION", payload: id });
+    // const jobRef = doc(db, "applicationTrackingList", id);
+    if (user?.uid) {
+      const jobRef = doc(db, "users", user.uid, "applications", id);
+
+      await deleteDoc(jobRef);
+      dispatch({ type: "REMOVE_TRACKING_APPLICATION", payload: id });
+    }
   }
 
   return (

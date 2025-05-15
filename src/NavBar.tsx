@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "./lib/UserContext";
+import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./components/ui/popover";
+import { signOut } from "firebase/auth";
+import { auth } from "./lib/config/firebaseConfig";
+import { Button } from "./components/ui/button";
 
 function NavBar() {
+  const { user } = useAuth();
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => location.reload())
+      .catch((err) => console.error(err));
+  };
+
   return (
     <>
       <nav className="border-b border-gray-200  bg-opacity-80 backdrop-blur">
@@ -36,16 +54,40 @@ function NavBar() {
                     aria-current="page">
                     Home
                   </Link>
-                  <Link
+                  {/* <Link
                     to={"/"}
                     className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium">
                     About
-                  </Link>
-                  <Link
-                    to={"/"}
-                    className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium">
-                    Sign In
-                  </Link>
+                  </Link> */}
+                  {user ? (
+                    <Popover>
+                      <PopoverTrigger>
+                        <Avatar>
+                          <AvatarImage
+                            src={user.photoURL || ""}
+                            alt="@shadcn"
+                          />
+                          <AvatarFallback>
+                            {user.displayName?.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                      </PopoverTrigger>
+                      <PopoverContent className="text-gray-800 w-40">
+                        <Button
+                          variant="outline"
+                          className="text-sm w-full"
+                          onClick={handleLogout}>
+                          Sign Out
+                        </Button>
+                      </PopoverContent>
+                    </Popover>
+                  ) : (
+                    <Link
+                      to={"/auth"}
+                      className="transition duration-300 ease-in-out hover:bg-green-100 px-3 py-2 rounded-md text-sm font-medium">
+                      Sign In
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
